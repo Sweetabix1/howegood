@@ -34,7 +34,7 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-start gap-12 p-8 sm:p-12 md:p-16 lg:p-24 bg-stone-950">
       {waveData && windData ? (
         <div className="flex flex-col gap-3">
-          <p className="font-light text-stone-400 text-xs">Coordinates: 51.63, -8.58</p>
+          <p className="font-light text-stone-400 text-xs">Coordinates: 51.56, -8.64</p>
           <h1 className="text-2xl font-bold text-stone-100">Current forecast:</h1>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Swell direction:</p>
