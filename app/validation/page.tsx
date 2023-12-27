@@ -1,10 +1,10 @@
 "use client";
 
-import { getWaveScore } from "@/app/Logic/getWaveScore";
+import { getWaveScore } from "@/app/scoreLogic/getWaveScore";
 import Link from "@/node_modules/next/link";
 import { useEffect, useState } from "react";
-import { manipulatePeriod } from "../Logic/WavePeriod/manipulatePeriod";
-import { validation_set } from "../Validate/validation-set-1";
+import { manipulatePeriod } from "../scoreLogic/WavePeriod/manipulatePeriod";
+import { validation_set } from "../validate/validation-set-1";
 
 export default function Validaton() {
   const [testData, setTestData] = useState<any>();
