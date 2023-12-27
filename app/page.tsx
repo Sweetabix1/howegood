@@ -1,113 +1,201 @@
-import Image from 'next/image'
+"use client";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import Link from "@/node_modules/next/link";
+import { useEffect, useState } from "react";
+import { getWaveScore } from "./Logic/getWaveScore";
+import { manipulatePeriod } from "./Logic/WavePeriod/manipulatePeriod";
 
 export default function Home() {
+  const [testData, setTestData] = useState<any>();
+  async function fetchMarineWeather() {
+    const apiUrl = `https://marine-api.open-meteo.com/v1/marine?latitude=51.51&longitude=-8.646815&hourly=wave_direction,wave_height,wave_period`;
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setTestData(data);
+      return data;
+    } catch (error) {
+      // console.error("Error fetching marine weather data:", error);
+    }
+  }
+
+  // Usage
+  useEffect(() => {
+    fetchMarineWeather().then((data) => {
+      // console.log(data);
+    });
+  }, []);
+
+  const [testWindData, setTestWindData] = useState<any>();
+  async function fetchWind() {
+    const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=51.562010&longitude=-8.646815&hourly=wind_speed_10m,wind_direction_10m`;
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const data = await response.json();
+      setTestWindData(data);
+      console.log(data);
+      return data;
+    } catch (error) {
+      // console.error("Error fetching marine weather data:", error);
+    }
+  }
+
+  // Usage
+  useEffect(() => {
+    fetchWind().then((data) => {});
+  }, []);
+
+  const getSimpleScore = () => {
+    // how I want this to work:
+    // FIGURE OUT THE IDEAL SCORE:
+
+    // need different scores for different beaches ideally..
+    // maybe start with Howe strand..
+
+    // height: 8ft + > gets full grade (with caveat for huge swells)
+    // direction: 170-220* > gets full grade
+    // period: 10s + > gets full grade (with caveat for huge periods)
+    // wind direction: 350-60* > gets full grade
+    // wind strength:  < 15kmph gets full grade (if the direction is good, then strength should have less weighting?)
+
+    // EXTREMES:  there should be some extremes that should heavily impact the score, eg:
+    // high wind strength + southerly wind direction
+    // very high wind strengths
+    // the complete wrong swell direction..
+    // a very short period
+    // a very small swell
+
+    // how to do this:
+
+    // give everything a score from 0-1, and then multiply them all together, make logarithmic?
+    // ie.
+    // height: 0.1
+    // direction: 1
+    // period: 1
+    // wind direction: 1
+    // wind strength:  1
+
+    // tide: should this be in weighting or not? maybe its purely a swell rating, or a toggle for tide or something..
+
+    // could allow user to tweak what they want to weight.. ie. i'm a learner/intermediate/advanced etc..
+
+    if (testData && testWindData) {
+      const { wave_height: height, wave_period: period, wave_direction: direction } = testData.hourly;
+      const { wind_direction_10m: windDirection, wind_speed_10m: windSpeed } = testWindData.hourly;
+
+      return getWaveScore(height[1], direction[1], manipulatePeriod(period[1]), windDirection[1], windSpeed[1]);
+    }
+  };
+
+  console.log("7 >", manipulatePeriod(7));
+  console.log("8 >", manipulatePeriod(8));
+  console.log("9 >", manipulatePeriod(9));
+  console.log("10 >", manipulatePeriod(10));
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.tsx</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
+    <main className="flex min-h-screen flex-col items-start gap-12 p-24 bg-stone-950">
+      <Link className="text-blue-300" href="/validation">
+        To validation
+      </Link>
+
+      {testData ? (
+        <div className="flex flex-col gap-3">
+          <p className="font-light text-stone-400 text-xs">Coordinates: 51.63, -8.58</p>
+          <h1 className="text-2xl font-bold text-stone-100">Current forecast:</h1>
+          <div className="flex gap-2">
+            <p className="font-light text-stone-300">Swell direction:</p>
+            <p className="text-stone-100">{testData?.hourly?.wave_direction[1]} °</p>
+          </div>
+          <div className="flex gap-2">
+            <p className="font-light text-stone-300">Swell size:</p>
+            <p className="text-stone-100">{testData?.hourly?.wave_height[1]} m</p>
+          </div>
+          <div className="flex gap-2">
+            <p className="font-light text-stone-300">Swell period:</p>
+            <p className="text-stone-100">{manipulatePeriod(testData?.hourly?.wave_period[1])} s</p>
+          </div>
+          <div className="flex gap-2">
+            <p className="font-light text-stone-300">Wind direction:</p>
+            <p className="text-stone-100">{testWindData?.hourly?.wind_direction_10m[1]} °</p>
+          </div>
+          <div className="flex gap-2">
+            <p className="font-light text-stone-300">Wind speed:</p>
+            <p className="text-stone-100">{testWindData?.hourly?.wind_speed_10m[1]} kmph</p>
+          </div>
+          <div className="flex gap-2">
+            <p className="font-light text-stone-300">Score:</p>
+            <p className="text-stone-100">{getSimpleScore()}%</p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <p>Loading...</p>
+      )}
+      <div className="flex flex-col gap-2 w-full">
+        <h2 className="text-xl font-bold">Hourly forecast:</h2>
+        {testData && testWindData && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="text-stone-400">Time</TableHead>
+                <TableHead className="text-stone-400">Wave Height</TableHead>
+                <TableHead className="text-stone-400">Wave Period</TableHead>
+                <TableHead className="text-stone-400">Wave Direction</TableHead>
+                <TableHead className="text-stone-400">Wind Direction</TableHead>
+                <TableHead className="text-stone-400">Wind Speed</TableHead>
+                <TableHead className="text-stone-400">Score</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {new Array(20).fill("whatev").map((cur, i) => {
+                const currentTime = new Date();
+                // Set minutes and seconds to 0 to get the next full hour
+                currentTime.setMinutes(0, 0, 0);
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+                const hrs = currentTime.getHours();
+                // Add i hours to the current time
+                currentTime.setHours(hrs + i);
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+                const formattedHour = currentTime.getHours() % 12 || 12; // Convert 24-hour time to 12-hour format
+                const amPm = currentTime.getHours() >= 12 ? " pm" : " am";
+                const displayTime = `${formattedHour}${amPm}`;
+                const { wave_height, wave_period, wave_direction } = testData?.hourly;
+                const { wind_direction_10m, wind_speed_10m } = testWindData?.hourly;
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+                const specificHr = i + hrs;
+                return (
+                  <TableRow key={i}>
+                    <TableCell className="text-stone-400">{displayTime}</TableCell>
+                    <TableCell className="text-stone-100">{(wave_height[specificHr] * 3.2808).toFixed(1)} ft</TableCell>
+                    <TableCell className="text-stone-100">{manipulatePeriod(wave_period[specificHr])} s</TableCell>
+                    <TableCell className="text-stone-100">{wave_direction[specificHr]} °</TableCell>
+                    <TableCell className="text-stone-100">{wind_direction_10m[specificHr]} °</TableCell>
+                    <TableCell className="text-stone-100">{wind_speed_10m[specificHr]} kmph</TableCell>
+                    <TableCell className="text-stone-100">
+                      {getWaveScore(
+                        wave_height[specificHr],
+                        wave_direction[specificHr],
+                        wave_period[specificHr],
+                        wind_direction_10m[specificHr],
+                        wind_speed_10m[specificHr]
+                      )}
+                      %
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </main>
-  )
+  );
 }
