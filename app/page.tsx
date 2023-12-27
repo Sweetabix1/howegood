@@ -1,10 +1,8 @@
 "use client";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { useFetchWeather } from "./hooks/useFetchWeather";
+import ForecastTable from "./internal-components/ForecastTable";
 import { getWaveScore as calculateWaveScore } from "./scoreLogic/getWaveScore";
 import { manipulatePeriod } from "./scoreLogic/WavePeriod/manipulatePeriod";
 
@@ -14,11 +12,21 @@ export default function Home() {
   const windURL = `https://api.open-meteo.com/v1/forecast?latitude=51.562010&longitude=-8.646815&hourly=wind_speed_10m,wind_direction_10m`;
   const windData = useFetchWeather(windURL);
 
-  const getScore = () => {
+  const currentTime = new Date();
+  currentTime.setMinutes(0, 0, 0);
+  const hrs = currentTime.getHours();
+  const getScore = (hour: number = hrs) => {
+    console.log("hour in getscore", hour);
     if (waveData && windData) {
       const { wave_height: height, wave_period: period, wave_direction: direction } = waveData.hourly;
       const { wind_direction_10m: windDirection, wind_speed_10m: windSpeed } = windData.hourly;
-      return calculateWaveScore(height[1], direction[1], manipulatePeriod(period[1]), windDirection[1], windSpeed[1]);
+      return calculateWaveScore(
+        height[hour],
+        direction[hour],
+        manipulatePeriod(period[hour]),
+        windDirection[hour],
+        windSpeed[hour]
+      );
     }
   };
 
@@ -54,53 +62,11 @@ export default function Home() {
           </div>
         </div>
       ) : (
-        <p>Loading...</p>
+        <p className="text-stone-100">Loading...</p>
       )}
       <div className="flex flex-col gap-2 w-full">
         <h2 className="text-xl font-bold">Hourly forecast:</h2>
-        {waveData && windData && (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="text-stone-400">Time</TableHead>
-                <TableHead className="text-stone-400">Wave Height</TableHead>
-                <TableHead className="text-stone-400">Wave Period</TableHead>
-                <TableHead className="text-stone-400">Wave Direction</TableHead>
-                <TableHead className="text-stone-400">Wind Direction</TableHead>
-                <TableHead className="text-stone-400">Wind Speed</TableHead>
-                <TableHead className="text-stone-400">Score</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {new Array(20).fill("whatev").map((cur, i) => {
-                const currentTime = new Date();
-                // Set minutes and seconds to 0 to get the next full hour
-                currentTime.setMinutes(0, 0, 0);
-                const hrs = currentTime.getHours();
-                // Add i hours to the current time
-                currentTime.setHours(hrs + i);
-                const formattedHour = currentTime.getHours() % 12 || 12; // Convert 24-hour time to 12-hour format
-                const amPm = currentTime.getHours() >= 12 ? " pm" : " am";
-                const displayTime = `${formattedHour}${amPm}`;
-                const { wave_height, wave_period, wave_direction } = waveData?.hourly;
-                const { wind_direction_10m, wind_speed_10m } = windData?.hourly;
-
-                const specificHr = i + hrs;
-                return (
-                  <TableRow key={i}>
-                    <TableCell className="text-stone-400">{displayTime}</TableCell>
-                    <TableCell className="text-stone-100">{(wave_height[specificHr] * 3.2808).toFixed(1)} ft</TableCell>
-                    <TableCell className="text-stone-100">{manipulatePeriod(wave_period[specificHr])} s</TableCell>
-                    <TableCell className="text-stone-100">{wave_direction[specificHr]} °</TableCell>
-                    <TableCell className="text-stone-100">{wind_direction_10m[specificHr]} °</TableCell>
-                    <TableCell className="text-stone-100">{wind_speed_10m[specificHr]} kmph</TableCell>
-                    <TableCell className="text-stone-100">{getScore()}%</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        )}
+        {waveData && windData && <ForecastTable waveData={waveData} windData={windData} getScore={getScore} />}
       </div>
     </main>
   );
