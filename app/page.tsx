@@ -31,7 +31,7 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-start gap-12 p-24 bg-stone-950">
+    <main className="flex min-h-screen flex-col items-start gap-12 p-8 sm:p-12 md:p-16 lg:p-24 bg-stone-950">
       {waveData && windData ? (
         <div className="flex flex-col gap-3">
           <p className="font-light text-stone-400 text-xs">Coordinates: 51.63, -8.58</p>
