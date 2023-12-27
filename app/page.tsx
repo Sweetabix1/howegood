@@ -16,7 +16,6 @@ export default function Home() {
   currentTime.setMinutes(0, 0, 0);
   const hrs = currentTime.getHours();
   const getScore = (hour: number = hrs) => {
-    console.log("hour in getscore", hour);
     if (waveData && windData) {
       const { wave_height: height, wave_period: period, wave_direction: direction } = waveData.hourly;
       const { wind_direction_10m: windDirection, wind_speed_10m: windSpeed } = windData.hourly;
@@ -30,6 +29,8 @@ export default function Home() {
     }
   };
 
+  console.log("wave score for last row", calculateWaveScore(4.2, 236, 13, 253, 55.1));
+  console.log("wave score for 2nd last row", calculateWaveScore(4, 236, 12.8, 253, 55.1));
   return (
     <main className="flex min-h-screen flex-col items-start gap-12 p-8 sm:p-12 md:p-16 lg:p-24 bg-stone-950">
       {waveData && windData ? (
@@ -38,23 +39,23 @@ export default function Home() {
           <h1 className="text-2xl font-bold text-stone-100">Current forecast:</h1>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Swell direction:</p>
-            <p className="text-stone-100">{waveData?.hourly?.wave_direction[1]} °</p>
+            <p className="text-stone-100">{waveData?.hourly?.wave_direction[hrs]} °</p>
           </div>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Swell size:</p>
-            <p className="text-stone-100">{waveData?.hourly?.wave_height[1]} m</p>
+            <p className="text-stone-100">{waveData?.hourly?.wave_height[hrs]} m</p>
           </div>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Swell period:</p>
-            <p className="text-stone-100">{manipulatePeriod(waveData?.hourly?.wave_period[1])} s</p>
+            <p className="text-stone-100">{manipulatePeriod(waveData?.hourly?.wave_period[hrs])} s</p>
           </div>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Wind direction:</p>
-            <p className="text-stone-100">{windData?.hourly?.wind_direction_10m[1]} °</p>
+            <p className="text-stone-100">{windData?.hourly?.wind_direction_10m[hrs]} °</p>
           </div>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Wind speed:</p>
-            <p className="text-stone-100">{windData?.hourly?.wind_speed_10m[1]} kmph</p>
+            <p className="text-stone-100">{windData?.hourly?.wind_speed_10m[hrs]} kmph</p>
           </div>
           <div className="flex gap-2">
             <p className="font-light text-stone-300">Score:</p>

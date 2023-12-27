@@ -2,7 +2,7 @@ import { getOptimalWindSpeed } from "./getOptimalWindSpeed";
 
 export const getWindSpeedScore = (kmph: number, direction: number) => {
   const optimalWindSpeed = getOptimalWindSpeed(direction);
-  console.log("kmph", kmph);
+
   if (kmph <= optimalWindSpeed) {
     return 1;
     // base 12
@@ -17,14 +17,14 @@ export const getWindSpeedScore = (kmph: number, direction: number) => {
   } else if (kmph <= optimalWindSpeed + 28) {
     return 0.86;
   } else if (kmph <= optimalWindSpeed + 33) {
-    return 0.82;
+    return 0.8;
   } else if (kmph <= optimalWindSpeed + 38) {
-    return 0.78;
-  } else if (kmph <= optimalWindSpeed + 43) {
     return 0.72;
+  } else if (kmph <= optimalWindSpeed + 43) {
+    return 0.64;
   } else if (kmph <= optimalWindSpeed + 48) {
-    return 0.65;
+    return 0.52;
   } else {
-    return 0.5;
+    return 0.4;
   }
 };

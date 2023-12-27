@@ -19,6 +19,6 @@ export const getWaveScore = (
   const windSpeedScore = getWindSpeedScore(windSpeed, windDirection);
 
   score = waveSizeScore * wavePeriodScore * waveDirectionScore * windDirectionScore * windSpeedScore * 100;
-  console.log(score);
+
   return Math.round(score);
 };
