@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { manipulatePeriod } from "../ScoreLogic/WavePeriod/manipulatePeriod";
+import { manipulatePeriod } from "../scoreLogic/WavePeriod/manipulatePeriod";
 
 interface HourlyDataProps {
   waveData: {
