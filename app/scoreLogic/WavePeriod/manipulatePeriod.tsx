@@ -1,7 +1,7 @@
 export function manipulatePeriod(number: number) {
-  if (number <= 6) {
+  if (number <= 6.5) {
     return +number.toFixed(1);
   } else {
-    return +(number + (number - 6)).toFixed(1);
+    return +(number + (number - 6.7)).toFixed(1);
   }
 }

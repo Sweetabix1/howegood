@@ -1,4 +1,5 @@
 export const getWindSpeedScore = (kmph: number) => {
+  console.log("kmph", kmph);
   if (kmph <= 12) {
     return 1;
   } else if (kmph <= 14) {
@@ -11,7 +12,15 @@ export const getWindSpeedScore = (kmph: number) => {
     return 0.92;
   } else if (kmph <= 40) {
     return 0.86;
+  } else if (kmph <= 45) {
+    return 0.82;
+  } else if (kmph <= 50) {
+    return 0.78;
+  } else if (kmph <= 55) {
+    return 0.72;
+  } else if (kmph <= 60) {
+    return 0.65;
   } else {
-    return 0.8;
+    return 0.5;
   }
 };
