@@ -22,11 +22,11 @@ export const getWaveSizeScore = (waveSize: number, wavePeriod: number, waveDirec
   } else if (withinWaveLowerLimit(4) || withinWaveHigherLimit(4)) {
     return 0.9;
   } else if (withinWaveLowerLimit(5) || withinWaveHigherLimit(5)) {
-    return 0.8;
+    return 0.76;
   } else if (withinWaveLowerLimit(6) || withinWaveHigherLimit(6)) {
     return 0.6;
   } else if (withinWaveLowerLimit(7) || withinWaveHigherLimit(7)) {
-    return 0.5;
+    return 0.45;
   } else {
     return 0.3;
   }
