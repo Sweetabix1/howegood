@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-start bg-stone-950">
       {waveData && windData ? (
-        <div className="flex flex-col gap-4 p-8 sm:p-12 md:p-16 lg:p-24 pb-0 sm:pb-0 md:pb-0 lg:pb-0">
+        <div className="flex flex-col gap-4 p-8 sm:p-12 md:p-16 lg:p-24 pb-8 sm:pb-8 md:pb-0 lg:pb-0">
           <p className="text-stone-400 text-xs">Coordinates: 51.56, -8.64</p>
           <h1 className="text-2xl font-bold text-stone-100">Current forecast</h1>
           <div className="flex flex-col gap-1">
@@ -88,7 +88,7 @@ export default function Home() {
       )}
       {waveData && windData && (
         <div className="flex flex-col gap-4 w-full p-0 md:p-16 lg:p-24">
-          <h2 className="text-xl font-bold text-stone-100 pl-8 md:p-0">Hourly forecast:</h2>
+          <h2 className="text-xl font-bold text-stone-100 pl-8 sm:pl-12 md:pl-0">Hourly forecast:</h2>
           <ForecastTable waveData={waveData} windData={windData} getScore={getScore} />
         </div>
       )}
