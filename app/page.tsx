@@ -33,7 +33,7 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-start bg-stone-950">
       {waveData && windData ? (
-        <div className="flex flex-col gap-4 p-8 sm:p-12 md:p-16 lg:p-24 pb-8 sm:pb-8 md:pb-0 lg:pb-0">
+        <div className="flex flex-col gap-4 p-8 sm:p-12 md:p-16 lg:p-24 pb-8 sm:pb-8 md:pb-0 lg:pb-0 text-xl">
           <div className="flex flex-col gap-2">
             <p className="text-stone-400 text-xs">Coordinates: 51.56, -8.64</p>
             <h1 className="text-2xl font-bold text-stone-100">Current forecast</h1>
@@ -46,17 +46,17 @@ export default function Home() {
                   <Arrow angle={waveData?.hourly?.wave_direction[hrs]} />
                   <p className="text-stone-100 font-bold">
                     {waveData?.hourly?.wave_direction[hrs]}
-                    <span className="text-stone-400 font-regular">°</span>
+                    <span className="text-stone-400 font-normal">°</span>
                   </p>
                 </div>
                 <p className="text-stone-100 font-bold">
                   {(waveData?.hourly?.wave_height[hrs] * 3.2808).toFixed(1)}
-                  <span className="text-stone-400 font-regular text-sm">ft</span>
+                  <span className="text-stone-400 font-normal text-sm">ft</span>
                 </p>
                 <p className="text-stone-400">@</p>
                 <p className="text-stone-100 font-bold">
                   {manipulatePeriod(waveData?.hourly?.wave_period[hrs])}
-                  <span className="text-stone-400 font-regular text-sm">s</span>
+                  <span className="text-stone-400 font-normal text-sm">s</span>
                 </p>
               </div>
             </div>
@@ -66,14 +66,14 @@ export default function Home() {
               <div className="flex gap-3 items-center">
                 <div className="flex gap-2 items-center">
                   <Arrow angle={windData?.hourly?.wind_direction_10m[hrs]} />
-                  <p className="text-stone-100">
+                  <p className="text-stone-100 font-bold">
                     {windData?.hourly?.wind_direction_10m[hrs]}
-                    <span className="text-stone-400 font-regular">°</span>
+                    <span className="text-stone-400 font-normal">°</span>
                   </p>
                 </div>
                 <p className="text-stone-100 font-bold">
                   {windData?.hourly?.wind_speed_10m[hrs]}
-                  <span className="text-stone-400 font-regular text-sm">kmph</span>
+                  <span className="text-stone-400 font-normal text-sm">kmph</span>
                 </p>
                 <p className="text-stone-100 font-bold"></p>
               </div>
@@ -86,7 +86,7 @@ export default function Home() {
               className="text-stone-100 font-bold text-5xl"
               style={{ color: `hsl(${(getScore()! * 1.15).toFixed(0)}, 60%, 62%)` }}>
               {getScore()}
-              <span className="text-stone-400 font-regular text-xl">%</span>
+              <span className="text-stone-400 font-normal text-xl">%</span>
             </p>
           </div>
         </div>
