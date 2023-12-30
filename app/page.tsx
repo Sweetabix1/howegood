@@ -33,40 +33,60 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-start bg-stone-950">
       {waveData && windData ? (
         <div className="flex flex-col gap-3 p-8 sm:p-12 md:p-16 lg:p-24">
-          <p className="font-light text-stone-400 text-xs">Coordinates: 51.56, -8.64</p>
+          <p className="text-stone-400 text-xs">Coordinates: 51.56, -8.64</p>
           <h1 className="text-2xl font-bold text-stone-100">Current forecast:</h1>
           <div className="flex gap-2">
-            <p className="font-light text-stone-300">Swell direction:</p>
-            <p className="text-stone-100">{waveData?.hourly?.wave_direction[hrs]} °</p>
+            <p className="text-stone-400">Swell direction:</p>
+            <p className="text-stone-100 font-bold">
+              {waveData?.hourly?.wave_direction[hrs]}
+              <span className="text-stone-400 font-regular">°</span>
+            </p>
           </div>
           <div className="flex gap-2">
-            <p className="font-light text-stone-300">Swell size:</p>
-            <p className="text-stone-100">{waveData?.hourly?.wave_height[hrs]} m</p>
+            <p className="text-stone-400">Swell size:</p>
+            <p className="text-stone-100 font-bold">
+              {(waveData?.hourly?.wave_height[hrs] * 3.2808).toFixed(1)}
+              <span className="text-stone-400 font-regular text-sm">ft</span>
+            </p>
           </div>
           <div className="flex gap-2">
-            <p className="font-light text-stone-300">Swell period:</p>
-            <p className="text-stone-100">{manipulatePeriod(waveData?.hourly?.wave_period[hrs])} s</p>
+            <p className="text-stone-400">Swell period:</p>
+            <p className="text-stone-100 font-bold">
+              {manipulatePeriod(waveData?.hourly?.wave_period[hrs])}
+              <span className="text-stone-400 font-regular text-sm">s</span>
+            </p>
           </div>
           <div className="flex gap-2">
-            <p className="font-light text-stone-300">Wind direction:</p>
-            <p className="text-stone-100">{windData?.hourly?.wind_direction_10m[hrs]} °</p>
+            <p className="text-stone-400">Wind direction:</p>
+            <p className="text-stone-100 ">
+              {windData?.hourly?.wind_direction_10m[hrs]}
+              <span className="text-stone-400 font-regular">°</span>
+            </p>
           </div>
           <div className="flex gap-2">
-            <p className="font-light text-stone-300">Wind speed:</p>
-            <p className="text-stone-100">{windData?.hourly?.wind_speed_10m[hrs]} kmph</p>
+            <p className="text-stone-400">Wind speed:</p>
+            <p className="text-stone-100 font-bold">
+              {windData?.hourly?.wind_speed_10m[hrs]}
+              <span className="text-stone-400 font-regular text-sm">kmph</span>
+            </p>
           </div>
           <div className="flex gap-2">
-            <p className="font-light text-stone-300">Score:</p>
-            <p className="text-stone-100">{getScore()}%</p>
+            <p className="text-stone-400">Score:</p>
+            <p className="text-stone-100 font-bold">
+              {getScore()}
+              <span className="text-stone-400 font-regular text-sm">%</span>
+            </p>
           </div>
         </div>
       ) : (
-        <p className="text-stone-100">Loading...</p>
+        <p className="text-stone-100 p-8">Loading...</p>
       )}
-      <div className="flex flex-col gap-4 w-full p-0 md:p-16 lg:p-24">
-        <h2 className="text-xl font-bold text-stone-100 pl-8 md:p-0">Hourly forecast:</h2>
-        {waveData && windData && <ForecastTable waveData={waveData} windData={windData} getScore={getScore} />}
-      </div>
+      {waveData && windData && (
+        <div className="flex flex-col gap-4 w-full p-0 md:p-16 lg:p-24">
+          <h2 className="text-xl font-bold text-stone-100 pl-8 md:p-0">Hourly forecast:</h2>
+          <ForecastTable waveData={waveData} windData={windData} getScore={getScore} />
+        </div>
+      )}
     </main>
   );
 }

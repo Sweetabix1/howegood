@@ -27,10 +27,10 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
     <Table>
       <TableHeader className="sticky top-0 bg-stone-900 z-10">
         <TableRow>
-          <TableHead className="text-stone-400">Time</TableHead>
-          <TableHead className="text-stone-400">Wave</TableHead>
-          <TableHead className="text-stone-400">Wind</TableHead>
-          <TableHead className="text-stone-400">Score</TableHead>
+          <TableHead className="text-stone-400">Time:</TableHead>
+          <TableHead className="text-stone-400">Wave:</TableHead>
+          <TableHead className="text-stone-400">Wind:</TableHead>
+          <TableHead className="text-stone-400">Score:</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -48,7 +48,7 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
 
           return (
             <TableRow key={i}>
-              <TableCell className="text-stone-400 sticky w-20">{displayTime}</TableCell>
+              <TableCell className="text-stone-400 sticky min-w-20">{displayTime}</TableCell>
               <TableCell className="text-stone-400 flex gap-6 text-xs items-center">
                 <div className="flex gap-2 items-center">
                   <Arrow angle={wave_direction[specificHr]} />
@@ -82,7 +82,8 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
               </TableCell>
 
               <TableCell className="text-stone-100">
-                <span className="text-stone-100 font-bold text-base">{getScore(specificHr)}</span>%
+                <span className="text-stone-100 font-bold text-base">{getScore(specificHr)}</span>
+                <span className="text-stone-400 text-xs font-normal">{"%"}</span>
               </TableCell>
             </TableRow>
           );
