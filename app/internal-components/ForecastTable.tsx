@@ -1,6 +1,7 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { manipulatePeriod } from "../scoreLogic/WavePeriod/manipulatePeriod";
+import { Arrow } from "./Arrow";
 
 interface HourlyDataProps {
   waveData: {
@@ -24,14 +25,11 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
 
   return (
     <Table>
-      <TableHeader>
+      <TableHeader className="sticky top-0 bg-stone-900 z-10">
         <TableRow>
           <TableHead className="text-stone-400">Time</TableHead>
-          <TableHead className="text-stone-400">Wave Height</TableHead>
-          <TableHead className="text-stone-400">Wave Period</TableHead>
-          <TableHead className="text-stone-400">Wave Direction</TableHead>
-          <TableHead className="text-stone-400">Wind Direction</TableHead>
-          <TableHead className="text-stone-400">Wind Speed</TableHead>
+          <TableHead className="text-stone-400">Wave</TableHead>
+          <TableHead className="text-stone-400">Wind</TableHead>
           <TableHead className="text-stone-400">Score</TableHead>
         </TableRow>
       </TableHeader>
@@ -44,20 +42,48 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
           const formattedHour = currentTime.getHours() % 12 || 12;
           const amPm = currentTime.getHours() >= 12 ? " pm" : " am";
           const displayTime = `${formattedHour}${amPm}`;
-
           const specificHr = i + hrs;
           const { wave_height, wave_period, wave_direction } = waveData.hourly;
           const { wind_direction_10m, wind_speed_10m } = windData.hourly;
 
           return (
             <TableRow key={i}>
-              <TableCell className="text-stone-400">{displayTime}</TableCell>
-              <TableCell className="text-stone-100">{(wave_height[specificHr] * 3.2808).toFixed(1)} ft</TableCell>
-              <TableCell className="text-stone-100">{manipulatePeriod(wave_period[specificHr])} s</TableCell>
-              <TableCell className="text-stone-100">{wave_direction[specificHr]} °</TableCell>
-              <TableCell className="text-stone-100">{wind_direction_10m[specificHr]} °</TableCell>
-              <TableCell className="text-stone-100">{wind_speed_10m[specificHr]} kmph</TableCell>
-              <TableCell className="text-stone-100">{getScore(specificHr)}%</TableCell>
+              <TableCell className="text-stone-400 sticky">{displayTime}</TableCell>
+              <TableCell className="text-stone-400 flex gap-6 text-xs items-center">
+                <div className="flex gap-2 items-center">
+                  <Arrow angle={wave_direction[specificHr]} />
+                  {wave_direction[specificHr]}°
+                </div>
+                <div className="text-stone-400 flex gap-2 items-baseline">
+                  <span className="text-stone-100 font-bold text-base">
+                    {(wave_height[specificHr] * 3.2808).toFixed(1)}
+                    <span className="text-stone-400 text-xs font-normal">{"ft"}</span>
+                  </span>
+                  @
+                  <span className="text-stone-100 font-bold text-base">
+                    {manipulatePeriod(wave_period[specificHr])}
+                    <span className="text-stone-400 text-xs font-normal">{"s"}</span>
+                  </span>
+                </div>
+              </TableCell>
+              <TableCell>
+                <div className="text-stone-400 flex gap-6 text-xs items-center">
+                  <div className="flex gap-2 items-center">
+                    <Arrow angle={wind_direction_10m[specificHr]} />
+                    {wind_direction_10m[specificHr]}°
+                  </div>
+                  <div className="text-stone-400 flex gap-2 items-baseline">
+                    <span className="text-stone-100 font-bold text-base">
+                      {wind_speed_10m[specificHr]}
+                      <span className="text-stone-400 text-xs font-normal">{"kmph"}</span>
+                    </span>
+                  </div>
+                </div>
+              </TableCell>
+
+              <TableCell className="text-stone-100">
+                <span className="text-stone-100 font-bold text-base">{getScore(specificHr)}</span>%
+              </TableCell>
             </TableRow>
           );
         })}

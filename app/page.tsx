@@ -65,7 +65,7 @@ export default function Home() {
       ) : (
         <p className="text-stone-100">Loading...</p>
       )}
-      <div className="flex flex-col gap-2 w-full">
+      <div className="flex flex-col gap-4 w-full">
         <h2 className="text-xl font-bold text-stone-100">Hourly forecast:</h2>
         {waveData && windData && <ForecastTable waveData={waveData} windData={windData} getScore={getScore} />}
       </div>
