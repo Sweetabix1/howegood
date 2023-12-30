@@ -29,12 +29,10 @@ export default function Home() {
     }
   };
 
-  console.log("wave score for last row", calculateWaveScore(4.2, 236, 13, 253, 55.1));
-  console.log("wave score for 2nd last row", calculateWaveScore(4, 236, 12.8, 253, 55.1));
   return (
-    <main className="flex min-h-screen flex-col items-start gap-12 p-8 sm:p-12 md:p-16 lg:p-24 bg-stone-950">
+    <main className="flex min-h-screen flex-col items-start bg-stone-950">
       {waveData && windData ? (
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 p-8 sm:p-12 md:p-16 lg:p-24">
           <p className="font-light text-stone-400 text-xs">Coordinates: 51.56, -8.64</p>
           <h1 className="text-2xl font-bold text-stone-100">Current forecast:</h1>
           <div className="flex gap-2">
@@ -65,8 +63,8 @@ export default function Home() {
       ) : (
         <p className="text-stone-100">Loading...</p>
       )}
-      <div className="flex flex-col gap-4 w-full">
-        <h2 className="text-xl font-bold text-stone-100">Hourly forecast:</h2>
+      <div className="flex flex-col gap-4 w-full p-0 md:p-16 lg:p-24">
+        <h2 className="text-xl font-bold text-stone-100 pl-8 md:p-0">Hourly forecast:</h2>
         {waveData && windData && <ForecastTable waveData={waveData} windData={windData} getScore={getScore} />}
       </div>
     </main>

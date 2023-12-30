@@ -48,7 +48,7 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
 
           return (
             <TableRow key={i}>
-              <TableCell className="text-stone-400 sticky">{displayTime}</TableCell>
+              <TableCell className="text-stone-400 sticky w-20">{displayTime}</TableCell>
               <TableCell className="text-stone-400 flex gap-6 text-xs items-center">
                 <div className="flex gap-2 items-center">
                   <Arrow angle={wave_direction[specificHr]} />
