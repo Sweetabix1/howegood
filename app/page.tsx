@@ -82,7 +82,9 @@ export default function Home() {
 
           <div className="flex flex-col gap-1">
             <p className="text-stone-400 text-xs">Score:</p>
-            <p className="text-stone-100 font-bold text-5xl">
+            <p
+              className="text-stone-100 font-bold text-5xl"
+              style={{ color: `hsl(${(getScore()! * 1.15).toFixed(0)}, 60%, 62%)` }}>
               {getScore()}
               <span className="text-stone-400 font-regular text-xl">%</span>
             </p>

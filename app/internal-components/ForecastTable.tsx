@@ -82,7 +82,13 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
               </TableCell>
 
               <TableCell className="text-stone-100">
-                <span className="text-stone-100 font-bold text-base">{getScore(specificHr)}</span>
+                <span
+                  style={{
+                    color: `hsl(${(getScore(specificHr)! * 1.15).toFixed(0)}, 60%, 62%)`,
+                  }}
+                  className="font-bold text-base">
+                  {getScore(specificHr)}
+                </span>
                 <span className="text-stone-400 text-xs font-normal">{"%"}</span>
               </TableCell>
             </TableRow>
