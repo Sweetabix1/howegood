@@ -46,52 +46,60 @@ const ForecastTable: React.FC<HourlyDataProps> = ({ waveData, windData, getScore
           const { wave_height, wave_period, wave_direction } = waveData.hourly;
           const { wind_direction_10m, wind_speed_10m } = windData.hourly;
 
+          console.log(specificHr);
           return (
-            <TableRow key={i}>
-              <TableCell className="text-stone-400 sticky min-w-20">{displayTime}</TableCell>
-              <TableCell className="text-stone-400 flex gap-6 text-xs items-center">
-                <div className="flex gap-2 items-center">
-                  <Arrow angle={wave_direction[specificHr]} />
-                  {wave_direction[specificHr]}°
-                </div>
-                <div className="text-stone-400 flex gap-2 items-baseline">
-                  <span className="text-stone-100 font-bold text-base">
-                    {(wave_height[specificHr] * 3.2808).toFixed(1)}
-                    <span className="text-stone-400 text-xs font-normal">{"ft"}</span>
-                  </span>
-                  @
-                  <span className="text-stone-100 font-bold text-base">
-                    {manipulatePeriod(wave_period[specificHr])}
-                    <span className="text-stone-400 text-xs font-normal">{"s"}</span>
-                  </span>
-                </div>
-              </TableCell>
-              <TableCell>
-                <div className="text-stone-400 flex gap-6 text-xs items-center">
+            <>
+              {specificHr === 24 && (
+                <TableRow key={i} className={"h-10"}>
+                  <TableCell className="text-stone-400 sticky min-w-20">Tomorrow</TableCell>
+                </TableRow>
+              )}
+              <TableRow key={i} className={"h-10"}>
+                <TableCell className="text-stone-400 sticky min-w-20">{displayTime}</TableCell>
+                <TableCell className="text-stone-400 flex gap-6 text-xs items-center">
                   <div className="flex gap-2 items-center">
-                    <Arrow angle={wind_direction_10m[specificHr]} />
-                    {wind_direction_10m[specificHr]}°
+                    <Arrow angle={wave_direction[specificHr]} />
+                    {wave_direction[specificHr]}°
                   </div>
                   <div className="text-stone-400 flex gap-2 items-baseline">
                     <span className="text-stone-100 font-bold text-base">
-                      {wind_speed_10m[specificHr]}
-                      <span className="text-stone-400 text-xs font-normal">{"kmph"}</span>
+                      {(wave_height[specificHr] * 3.2808).toFixed(1)}
+                      <span className="text-stone-400 text-xs font-normal">{"ft"}</span>
+                    </span>
+                    @
+                    <span className="text-stone-100 font-bold text-base">
+                      {manipulatePeriod(wave_period[specificHr])}
+                      <span className="text-stone-400 text-xs font-normal">{"s"}</span>
                     </span>
                   </div>
-                </div>
-              </TableCell>
+                </TableCell>
+                <TableCell>
+                  <div className="text-stone-400 flex gap-6 text-xs items-center">
+                    <div className="flex gap-2 items-center">
+                      <Arrow angle={wind_direction_10m[specificHr]} />
+                      {wind_direction_10m[specificHr]}°
+                    </div>
+                    <div className="text-stone-400 flex gap-2 items-baseline">
+                      <span className="text-stone-100 font-bold text-base">
+                        {wind_speed_10m[specificHr]}
+                        <span className="text-stone-400 text-xs font-normal">{"kmph"}</span>
+                      </span>
+                    </div>
+                  </div>
+                </TableCell>
 
-              <TableCell className="text-stone-100">
-                <span
-                  style={{
-                    color: `hsl(${(getScore(specificHr)! * 1.15).toFixed(0)}, 60%, 62%)`,
-                  }}
-                  className="font-bold text-base">
-                  {getScore(specificHr)}
-                </span>
-                <span className="text-stone-400 text-xs font-normal">{"%"}</span>
-              </TableCell>
-            </TableRow>
+                <TableCell className="text-stone-100">
+                  <span
+                    style={{
+                      color: `hsl(${(getScore(specificHr)! * 1.15).toFixed(0)}, 60%, 62%)`,
+                    }}
+                    className="font-bold text-base">
+                    {getScore(specificHr)}
+                  </span>
+                  <span className="text-stone-400 text-xs font-normal">{"%"}</span>
+                </TableCell>
+              </TableRow>
+            </>
           );
         })}
       </TableBody>
